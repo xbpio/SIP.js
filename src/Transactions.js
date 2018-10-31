@@ -234,6 +234,8 @@ InviteClientTransaction.prototype.sendACK = function(options) {
   // TODO: Move PRACK stuff into the transaction layer. That is really where it should be
 
   var self = this,
+      dialogId = this.response.call_id + this.response.from_tag + this.response.to_tag,
+      route_set = (this.request.ua.dialogs[dialogId]) ? this.request.ua.dialogs[dialogId].route_set : this.response.getHeaders('record-route').reverse(),
       ruri;
   options = options || {};
 
@@ -253,7 +255,7 @@ InviteClientTransaction.prototype.sendACK = function(options) {
       from_tag: this.response.from_tag,
       to_uri: this.response.to.uri,
       to_tag: this.response.to_tag,
-      route_set: this.response.getHeaders('record-route').reverse()
+      route_set: route_set
     },
     options.extraHeaders || [],
     options.body
